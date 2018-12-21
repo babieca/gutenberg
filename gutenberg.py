@@ -88,7 +88,7 @@ if __name__ == '__main__':
                     
                     zip_file.extract(file, directory)
                     print("|--- url: '{}' -- file: '{}' --- saved: '{}'".
-                          format(link_zipfile, file))
+                          format(link_zipfile, file, directory))
                     
             zip_file.close()
             time.sleep(time_sleep_sec)
