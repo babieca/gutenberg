@@ -46,10 +46,10 @@ def is_absolute(url):
 
 if __name__ == '__main__':
 
-    time_sleep = 3
+    time_sleep_sec = 15
     #extensions = ('.txt', '.pdf')
     extensions = '.pdf'
-    directory = './files'
+    directory = './gutenberg'
     useragent_file = './user-agents.txt'
     url = 'http://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
     regex_zipfiles = 'http://aleph.gutenberg.org/.*\.zip'
@@ -75,19 +75,24 @@ if __name__ == '__main__':
                 
             if re.search(regex_nextpage, link['href']):
                 url = link['href']
-                url = url if is_absolute(url) else urljoin('http://aleph.gutenberg.org/', url)
+                url = url if is_absolute(url) else \
+                            urljoin('http://aleph.gutenberg.org/', url)
         
         
         for link_zipfile in links_zipfiles:
             resp = fetch_url(link_zipfile, useragent_file)
             zip_file = zipfile.ZipFile(io.BytesIO(resp.content))
             for file in zip_file.namelist():
-                if file.endswith(extensions):
-                    print("|--- url: '{}' extracting file: '{}'".format(link_zipfile, file))
+                if file.endswith(extensions) and \
+                    not os.path.exists(file):
+                    
                     zip_file.extract(file, directory)
+                    print("|--- url: '{}' -- file: '{}' --- saved: '{}'".
+                          format(link_zipfile, file))
+                    
             zip_file.close()
-            time.sleep(time_sleep)
+            time.sleep(time_sleep_sec)
         
-        time.sleep(time_sleep)
+        time.sleep(time_sleep_sec)
         
     sys.exit(0)
