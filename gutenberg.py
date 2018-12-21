@@ -8,6 +8,31 @@ import io
 import zipfile
 from urllib.parse import urlparse, urljoin
 import random
+import logging
+
+LOGGERNAME = 'gutenberg'
+loglevel = logging.INFO
+logfile_path = './logs.log'
+
+formatter = logging.Formatter(
+    ('%(asctime)s.%(msecs)03d - %(levelname)s - ' +
+    '[%(filename)s:%(lineno)d] #  %(message)s'),
+    '%Y-%m-%d:%H:%M:%S')
+
+logger = logging.getLogger(LOGGERNAME)
+logger.setLevel(loglevel)
+
+sHandler = logging.StreamHandler(stream=sys.stdout)
+sHandler.setLevel(loglevel)
+sHandler.setFormatter(formatter)
+
+fHandler = logging.FileHandler(logfile_path, encoding='utf-8') #, mode='w')
+fHandler.setLevel(loglevel)
+fHandler.setFormatter(formatter)
+
+logger.addHandler(sHandler)
+logger.addHandler(fHandler)
+
 
 def create_directory(dirname):
     if not os.path.exists(dirname):
@@ -62,7 +87,7 @@ if __name__ == '__main__':
     
     while url:
         
-        print("Requesting url: '{}'".format(url))
+        logger.info("Requesting url: '{}'".format(url))
         
         resp = fetch_url(url, useragent_file)
         soup =  bs(resp.content, 'lxml')
@@ -87,7 +112,7 @@ if __name__ == '__main__':
                     not os.path.exists(file):
                     
                     zip_file.extract(file, directory)
-                    print("|--- url: '{}' -- file: '{}' --- saved: '{}'".
+                    logger.info("[  url  ]  '{}'  [  file  ]  '{}'  [  saved  ]  '{}'".
                           format(link_zipfile, file, directory))
                     
             zip_file.close()
