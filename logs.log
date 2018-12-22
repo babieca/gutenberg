@@ -1,0 +1,6 @@
+2018-12-22:16:06:43.909 - INFO - [gutenberg.py:90] #  Requesting url: 'http://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
+2018-12-22:16:06:59.906 - INFO - [gutenberg.py:90] #  Requesting url: 'http://aleph.gutenberg.org/harvest?offset=903414&filetypes[]=pdf&langs[]=en'
+2018-12-22:16:08:42.302 - INFO - [gutenberg.py:91] #  Requesting url: 'http://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
+2018-12-22:16:08:57.564 - INFO - [gutenberg.py:91] #  Requesting url: 'https://www.gutenberg.org/robot/harvest?offset=903414&filetypes[]=pdf&langs[]=en'
+2018-12-22:16:09:13.857 - INFO - [gutenberg.py:91] #  Requesting url: 'https://www.gutenberg.org/robot/harvest?offset=1628763&filetypes[]=pdf&langs[]=en'
+2018-12-22:16:09:30.330 - INFO - [gutenberg.py:91] #  Requesting url: 'https://www.gutenberg.org/robot/harvest?offset=2197883&filetypes[]=pdf&langs[]=en'

@@ -76,7 +76,8 @@ if __name__ == '__main__':
     extensions = '.pdf'
     directory = './gutenberg'
     useragent_file = './user-agents.txt'
-    url = 'http://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
+    url_root = 'https://www.gutenberg.org/robot/'
+    url = 'https://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
     regex_zipfiles = 'http://aleph.gutenberg.org/.*\.zip'
     regex_nextpage = 'harvest\?offset\=\d+\&filetypes\[\]\=pdf\&langs\[\]\=en'
     
@@ -101,7 +102,7 @@ if __name__ == '__main__':
             if re.search(regex_nextpage, link['href']):
                 url = link['href']
                 url = url if is_absolute(url) else \
-                            urljoin('http://aleph.gutenberg.org/', url)
+                            urljoin(url_root, url)
         
         
         for link_zipfile in links_zipfiles:
