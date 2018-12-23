@@ -21,6 +21,7 @@ formatter = logging.Formatter(
 
 logger = logging.getLogger(LOGGERNAME)
 logger.setLevel(loglevel)
+logger.propagate = False
 
 sHandler = logging.StreamHandler(stream=sys.stdout)
 sHandler.setLevel(loglevel)
@@ -47,12 +48,12 @@ def create_directory(dirname):
 
 
 def random_line(fname):
-    
+
     with open(fname) as f:
         content = f.readline()
-    
+
     content = [x.strip() for x in content]
-    
+
     return random.choice(content)
 
 
@@ -61,7 +62,7 @@ def fetch_url(url, useragents_file=None):
     if useragents_file:
         random_useragent = random_line(useragents_file)
         headers = {'User-Agent': random_useragent}
-        
+
     return requests.get(url, headers)
 
 
@@ -80,45 +81,45 @@ if __name__ == '__main__':
     url = 'https://www.gutenberg.org/robot/harvest?offset=254442&filetypes[]=pdf&langs[]=en'
     regex_zipfiles = 'http://aleph.gutenberg.org/.*\.zip'
     regex_nextpage = 'harvest\?offset\=\d+\&filetypes\[\]\=pdf\&langs\[\]\=en'
-    
+
     if not os.path.isabs(directory):
         directory = os.path.abspath(directory)
-    
+
     create_directory(directory)
-    
+
     while url:
-        
+
         logger.info("Requesting url: '{}'".format(url))
-        
+
         resp = fetch_url(url, useragent_file)
         soup =  bs(resp.content, 'lxml')
-        
+
         url = None
         links_zipfiles = []
         for link in soup.find_all('a', href=True):
             if re.search(regex_zipfiles, link['href']):
                 links_zipfiles.append(link['href'])
-                
+
             if re.search(regex_nextpage, link['href']):
                 url = link['href']
                 url = url if is_absolute(url) else \
                             urljoin(url_root, url)
-        
-        
+
+
         for link_zipfile in links_zipfiles:
             resp = fetch_url(link_zipfile, useragent_file)
             zip_file = zipfile.ZipFile(io.BytesIO(resp.content))
             for file in zip_file.namelist():
                 if file.endswith(extensions) and \
                     not os.path.exists(file):
-                    
+
                     zip_file.extract(file, directory)
                     logger.info("[  url  ]  '{}'  [  file  ]  '{}'  [  saved  ]  '{}'".
                           format(link_zipfile, file, directory))
-                    
+
             zip_file.close()
             time.sleep(time_sleep_sec)
-        
+
         time.sleep(time_sleep_sec)
-        
+
     sys.exit(0)
