@@ -3,6 +3,8 @@ venv/
 .project
 *.pdf
 *.zip
+*.jpeg
+*.jpg
 
 .metadata
 bin/
